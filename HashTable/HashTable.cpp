@@ -48,14 +48,7 @@ void HashTable::insert(const Company& company)
 
 	while (!buckets.at(hashValue).name.empty())
 	{
-		if (hashValue == M - 1)
-		{
-			hashValue = 0;
-		}
-		else
-		{
-			hashValue++;
-		}
+		(hashValue + 1 == M) ? hashValue = 0 : hashValue++;
 	}
 	buckets.at(hashValue) = company;
 }
@@ -87,11 +80,10 @@ void HashTable::readFile(const std::string& filename)
 
 Company HashTable::find(const std::string& name)
 {
-	auto hashValue = hashString(name);
-	auto i = 0;
+	int hashValue = hashString(name);
 
 	if (buckets.at(hashValue).name.empty()) return Company();
-	while (i < buckets.size())
+	for (int i = 0; i < M; i++)
 	{
 		if (name == buckets.at(hashValue).name)
 		{
@@ -99,7 +91,7 @@ Company HashTable::find(const std::string& name)
 		}
 		else
 		{
-			hashValue++;
+			(hashValue + 1 == M) ? hashValue = 0 : hashValue++;
 		}
 	}
 	return Company();
